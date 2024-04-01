@@ -30,3 +30,11 @@ These dashboards can display live price charts, order book dynamics, trading vol
 Implement alerting mechanisms using Pulsar's messaging capabilities to notify users about significant price movements, 
 trading opportunities, or risk events in real-time.
 
+Connection String for Pinot from Superset
+
+pinot://pinot-broker:8099/query?server=http://pinot-controller:9000/
+
+References
+---
+
+- https://docs.pinot.apache.org/operators/tutorials/build-docker-images#pinot-superset
