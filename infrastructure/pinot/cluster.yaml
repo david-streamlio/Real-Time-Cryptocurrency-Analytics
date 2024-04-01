@@ -51,12 +51,33 @@ services:
     depends_on:
       - pinot-broker
 
+  superset:
+    image: apachepinot/pinot-superset:latest
+    platform: linux/amd64
+    restart: unless-stopped
+    container_name: "superset"
+    ports:
+      - "8088:8088"
+    env_file:
+      - .env
+    volumes:
+      - superset-config:/home/superset
+    depends_on:
+      - pinot-broker
+
 volumes:
   config_data:
     driver: local # Define the driver and options under the volume name
     driver_opts:
       type: none
       device: ./pinot-config
+      o: bind
+
+  superset-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./superset-config
       o: bind
 
 networks:
