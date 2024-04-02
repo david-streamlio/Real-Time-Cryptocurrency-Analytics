@@ -2,7 +2,7 @@ version: "3.9"
 services:
 
   zookeeper:
-    image: streamnative/sn-pulsar:3.1.2.2
+    image: apachepulsar/pulsar-all:3.2.2
     platform: linux/amd64
     container_name: zookeeper
     hostname: zookeeper
@@ -18,7 +18,7 @@ services:
       test: echo ruok | nc zookeeper 2181
 
   init-cluster:
-    image: streamnative/sn-pulsar:3.1.2.2
+    image: apachepulsar/pulsar-all:3.2.2
     platform: linux/amd64
     container_name: init-cluster
     hostname: init-cluster
@@ -29,7 +29,7 @@ services:
       bash -c "bin/pulsar initialize-cluster-metadata -c pulsar-cluster -zk zookeeper:2181 -cs zookeeper:2181 -uw http://pulsar-cluster-kafka-1:8080,pulsar-cluster-kafka-2:8080"
 
   bookie:
-    image: streamnative/sn-pulsar:3.1.2.2
+    image: apachepulsar/pulsar-all:3.2.2
     platform: linux/amd64
     depends_on:
       zookeeper:
@@ -50,12 +50,12 @@ services:
       test: curl --write-out 'HTTP %{http_code}' --fail --silent --output /dev/null http://localhost:8000/heartbeat
 
   pulsar:
-    image: streamnative/sn-pulsar:3.1.2.2
+    image: apachepulsar/pulsar-all:3.2.2
     platform: linux/amd64
     depends_on:
       bookie:
         condition: service_healthy
-    container_name: broker-1
+    container_name: pulsar-broker
     hostname: pulsar
     restart: always
     command: >
@@ -76,22 +76,20 @@ services:
     ports:
       - 6650:6650 # Pulsar Binary
       - 8080:8080
+    volumes:
+      - functions:/etc/pulsar-functions
     healthcheck:
       interval: 5s
       retries: 20
       test: curl --write-out 'HTTP %{http_code}' --fail --silent --output /dev/null http://localhost:8080/admin/v2/clusters/pulsar-cluster
 
-  coinbase-feed:
-    build:
-      context: ./coinbase-feed
-      dockerfile: Dockerfile
-    command: >
-      bash -c "sleep 20 &&
-         ./bin/pulsar-admin --admin-url http://pulsar:8080 functions create --jar /pulsar/connectors/coinbase-websocket-feed-router-1.0.0.nar --function-config-file /pulsar/connectors/coinbase-router-config.yaml &&
-         sleep 20 &&
-         ./bin/pulsar-admin --admin-url http://pulsar:8080 sources create --archive /pulsar/connectors/coinbase-live-feed-1.0.0.nar --source-config-file /pulsar/connectors/coinbase-connector.yaml"
-    depends_on:
-      - pulsar
+volumes:
+  functions:
+    driver: local # Define the driver and options under the volume name
+    driver_opts:
+      type: none
+      device: ./functions
+      o: bind
 
 networks:
   default:

@@ -1,5 +1,5 @@
 {
-  "tableName": "coinbase_rfq_match",
+  "tableName": "coinbase_ticker",
   "tableType": "REALTIME",
   "tenants": {},
   "segmentsConfig": {
@@ -19,7 +19,7 @@
       "streamConfigMaps": [
         {
           "streamType": "pulsar",
-          "stream.pulsar.topic.name": "persistent://feeds/realtime/coinbase-rfq",
+          "stream.pulsar.topic.name": "persistent://feeds/realtime/coinbase-ticker",
           "stream.pulsar.bootstrap.servers": "pulsar://pulsar-broker:6650",
           "stream.pulsar.consumer.prop.auto.offset.reset" : "smallest",
           "stream.pulsar.consumer.type": "lowlevel",
