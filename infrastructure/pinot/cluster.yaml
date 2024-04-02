@@ -83,3 +83,4 @@ volumes:
 networks:
   default:
     name: real-time-crypto
+    external: true

@@ -2,18 +2,19 @@
 # Deployment
 ##################################
 className: io.streamnative.data.feeds.realtime.coinbase.WebSocketSource
-tenant: public
-namespace: default
+tenant: feeds
+namespace: realtime
 name: coinbase-live-feed
-topicName: persistent://public/default/coinbase-livefeed
+topicName: persistent://feeds/realtime/coinbase-livefeed
 configs:
   websocketURI: "wss://ws-feed.exchange.coinbase.com"
-  subscription: "{ \"type\": \"subscribe\", \"channels\": [
-    { \"name\": \"rfq_matches\", \"product_ids\": [ \"\" ] } ] }"
+  subscription: "{ \"type\": \"subscribe\", 
+    \"channels\": [\"ticker\", \"rfq_matches\", \"auctionfeed\"], 
+    \"product_ids\": [ \"ETH-USD\", \"BTC-USD\" ] }"
 
 ##################################
 # Processing
 ##################################
 processingGuarantees: AT_MOST_ONCE
 schemaType: STRING
-logTopic: persistent://public/default/coinbase-log
+logTopic: persistent://feeds/realtime/coinbase-live-feed-log
