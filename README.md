@@ -23,7 +23,7 @@ Pulsar's scalability and durability ensure that all market data updates are capt
 the cloud. It will serve as our event streaming storage platform for this demo.
 
 ```bash
-sh ./bin/start-pulsar.sh
+sh ./bin/pulsar/start-pulsar.sh
 ```
 
 You can verify that the deployment was successful using the following command, and seeing output similar to that
@@ -94,7 +94,7 @@ Therefore, our [first Pulsar Function](https://github.com/david-streamlio/coinba
 for transforming these raw JSON strings into the appropriate schema type based on the channel it came from, and routing 
 them to different topics based on their contents.
 
-TODO: Create CBR image
+![coinbase-router.png](doc%2Fimages%2Fcoinbase-router.png)
 
 
 ```bash
@@ -132,7 +132,7 @@ volatility, liquidity, etc.
 as our analytics engine for this demo.
 
 ```bash
-sh ./bin/start-pinot.sh
+sh ./bin/pinot/start-pinot.sh
 ```
 
 You can verify that the deployment was successful using the following command, and seeing output similar to that
@@ -186,7 +186,7 @@ By default, Apache Superset is deployed with an admin user, so we will need to r
 the cluster and create a new `admin` user, that we can use to log into the UI.
 
 ```bash
-./bin/pinot/init-superset.sh
+./bin/superset/init-superset.sh
 ```
 
 In addition to the `Admin User admin created.` output from the above command, we can also verify that we have access to
@@ -209,6 +209,7 @@ This import includes a simple dataset, chart, and dashboard definition that you 
 your own in the future.
 
 ![Superset-Dashboards.png](doc%2Fimages%2FSuperset-Dashboards.png)
+
 
 Requirements
 ------------
