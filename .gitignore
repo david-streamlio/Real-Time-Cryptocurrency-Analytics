@@ -25,6 +25,8 @@ replay_pid*
 
 # IntelliJ Project files
 .idea
+.DS_Store
+**/.DS_Store
 
 # Docker volume residue
 infrastructure/pinot/superset-config/__pycache__/

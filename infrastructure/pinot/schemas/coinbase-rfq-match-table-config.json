@@ -1,0 +1,42 @@
+{
+  "tableName": "coinbase_rfq_match",
+  "tableType": "REALTIME",
+  "tenants": {},
+  "segmentsConfig": {
+    "timeColumnName": "millis",
+    "retentionTimeUnit": "DAYS",
+    "retentionTimeValue": "5",
+    "replication": "1"
+  },
+  "tableIndexConfig": {},
+  "routing": {
+    "segmentPrunerTypes": [
+      "time"
+    ]
+  },
+  "ingestionConfig": {
+    "streamIngestionConfig": {
+      "streamConfigMaps": [
+        {
+          "streamType": "pulsar",
+          "stream.pulsar.topic.name": "persistent://feeds/realtime/coinbase-rfq",
+          "stream.pulsar.bootstrap.servers": "pulsar://pulsar-broker:6650",
+          "stream.pulsar.consumer.prop.auto.offset.reset" : "smallest",
+          "stream.pulsar.consumer.type": "lowlevel",
+          "stream.pulsar.fetch.timeout.millis": "30000",
+          "stream.pulsar.decoder.class.name": "org.apache.pinot.plugin.inputformat.json.JSONMessageDecoder",
+          "stream.pulsar.consumer.factory.class.name": "org.apache.pinot.plugin.stream.pulsar.PulsarConsumerFactory",
+          "realtime.segment.flush.threshold.rows": "100000",
+          "realtime.segment.flush.threshold.time": "6h"
+        }
+      ]
+    },
+    "transformConfigs": [
+    ]
+  },
+  "fieldConfigList": [
+  ],
+  "metadata": {
+    "customConfigs": {}
+  }
+}

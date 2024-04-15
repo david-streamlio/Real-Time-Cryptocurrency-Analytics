@@ -1,0 +1,79 @@
+{
+  "metricFieldSpecs": [
+    {
+      "dataType": "DOUBLE",
+      "name": "price"
+    },
+    {
+      "dataType": "DOUBLE",
+      "name": "last_size"
+    }
+  ],
+  "dimensionFieldSpecs": [
+    {
+      "dataType": "LONG",
+      "name": "sequence"
+    },
+    {
+      "dataType": "STRING",
+      "name": "product_id"
+    },
+    {
+      "dataType": "DOUBLE",
+      "name": "open_24h"
+    },
+    {
+      "dataType": "DOUBLE",
+      "name": "volume_24h"
+    },
+    {
+      "dataType": "DOUBLE",
+      "name": "low_24h"
+    },
+    {
+      "dataType": "DOUBLE",
+      "name": "high_24h"
+    },
+    {
+      "dataType": "DOUBLE",
+      "name": "volume_30d"
+    },
+    {
+      "dataType": "DOUBLE",
+      "name": "best_bid"
+    },
+    {
+      "dataType": "DOUBLE",
+      "name": "best_bid_size"
+    },
+    {
+      "dataType": "DOUBLE",
+      "name": "best_ask"
+    },
+    {
+      "dataType": "DOUBLE",
+      "name": "best_ask_size"
+    },
+    {
+      "dataType": "STRING",
+      "name": "side"
+    },
+    {
+      "dataType": "STRING",
+      "name": "time"
+    },
+    {
+      "dataType": "LONG",
+      "name": "trade_id"
+    }
+  ],
+  "dateTimeFieldSpecs": [
+    {
+      "name": "millis",
+      "dataType": "LONG",
+      "format": "1:MILLISECONDS:EPOCH",
+      "granularity": "1:MILLISECONDS"
+    }
+  ],
+  "schemaName": "coinbase_ticker"
+}

@@ -120,11 +120,72 @@ key:[null], properties:[], content:{"sequence":58026240510,"product_id":"ETH-USD
 ...
 ````
 
+Last you need to build and deploy the Python-based [Function](infrastructure%2Fpulsar%2Ffunctions%2Fcoinbase-ticker-stats%2Fsrc%2Fstats.py) 
+that calculates various price metrics for the cryptocurrencies using the Pandas library. This can be done in two easy steps. 
+First, you need to package the python file along with its dependencies into a zip file using the following command.
+
+```bash
+sh ./bin/pulsar/build-ticker-stats.sh
+
+updating: coinbase-ticker-stats/ (stored 0%)
+updating: coinbase-ticker-stats/deps/ (stored 0%)
+updating: coinbase-ticker-stats/deps/numpy-1.26.4-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (deflated 1%)
+updating: coinbase-ticker-stats/deps/python_dateutil-2.9.0.post0-py2.py3-none-any.whl (deflated 1%)
+updating: coinbase-ticker-stats/deps/pytz-2024.1-py2.py3-none-any.whl (deflated 25%)
+updating: coinbase-ticker-stats/deps/pandas-2.2.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (deflated 2%)
+updating: coinbase-ticker-stats/deps/tzdata-2024.1-py2.py3-none-any.whl (deflated 32%)
+updating: coinbase-ticker-stats/deps/six-1.16.0-py2.py3-none-any.whl (deflated 4%)
+updating: coinbase-ticker-stats/src/ (stored 0%)
+updating: coinbase-ticker-stats/src/stats.py (deflated 71%)
+```
+
+Next, you deploy it using the following command:
+
+```bash
+sh ./bin/pulsar/start-ticker-stats.sh
+```
+
+You can verify that the TickerStats Function is working by running the following command to consume messages from the
+Function's configured output topic. If it is working properly, you should see output similar to that shown here:
+
+````
+docker exec -it pulsar-broker sh -c   "./bin/pulsar-client consume -n 0 -p Earliest -s my-sub persistent://feeds/realtime/coinbase-ticker-stats"
+
+...
+----- got message -----
+key:[null], properties:[__pfn_input_msg_id__=CAwQ9B4YAA==, __pfn_input_topic__=persistent://feeds/realtime/coinbase-ticker-partition-0], content:{
+ "sequence": 1231277600,
+ "product_id": "USDT-USD",
+ "price": 1.0005,
+ "latest_emwa": 1.000498239928398,
+ "latest_std": 4.0152407931263944e-06,
+ "latest_variance": 1.6122158626786277e-11,
+ "rolling_mean": 1.0004979999999999,
+ "rolling_std": 4.472135954755798e-06,
+ "rolling_variance": 1.999999999781955e-11,
+ "time": "2024-04-15T16:14:21.919683Z",
+ "millis": 1713197661919
+}
+----- got message -----
+key:[null], properties:[__pfn_input_msg_id__=CAwQ9R4YAA==, __pfn_input_topic__=persistent://feeds/realtime/coinbase-ticker-partition-0], content:{
+ "sequence": 78286110141,
+ "product_id": "BTC-USD",
+ "price": 64619.98,
+ "latest_emwa": 64615.50239556808,
+ "latest_std": 2.684163338194109,
+ "latest_variance": 7.204732826105343,
+ "rolling_mean": 64615.042,
+ "rolling_std": 3.143019249066717,
+ "rolling_variance": 9.878570000003908,
+ "time": "2024-04-15T16:14:21.988357Z",
+ "millis": 1713197661988
+}
+````
+
 Stream Processing with Apache Pinot
 --
-Store the preprocessed cryptocurrency data in Apache Pinot for real-time analytics and querying.
-Pinot's low-latency querying capabilities enable traders and analysts to retrieve up-to-date insights on market trends, 
-volatility, liquidity, etc.
+Store the preprocessed cryptocurrency data in Apache Pinot for real-time analytics and querying. Pinot's low-latency 
+querying capabilities enable traders and analysts to retrieve up-to-date insights on market trends, volatility, liquidity, etc.
 
 ### 4️⃣ Start Apache Pinot
 
@@ -148,7 +209,6 @@ c542a9da108b   apachepinot/pinot-superset:latest                 "/usr/bin/run-s
 4d8201855062   zookeeper:3.5.6                                   "/docker-entrypoint.…"   8 seconds ago    Up 7 seconds                       2888/tcp, 3888/tcp, 0.0.0.0:2181->2181/tcp, 8080/tcp        pinot-zookeeper
 ````
 
-
 ### 5️⃣ Create the Pinot Table Definitions
 
 Pinot supports consuming data from Apache Pulsar via the pinot-pulsar plugin. In order to expose the Pulsar topics to 
@@ -160,9 +220,10 @@ following command:
 
 INFO [AddTableCommand] [main] Executing command: AddTable -tableConfigFile /config/coinbase-rfq-match-table-config.json -offlineTableConfigFile null -realtimeTableConfigFile null -schemaFile /config/coinbase-rfq-match-schema.json -controllerProtocol http -controllerHost 172.22.0.6 -controllerPort 9000 -user null -password [hidden] -exec
 INFO [AddTableCommand] [main] Executing command: AddTable -tableConfigFile /config/coinbase-ticker-table-config.json -offlineTableConfigFile null -realtimeTableConfigFile null -schemaFile /config/coinbase-ticker-schema.json -controllerProtocol http -controllerHost 172.22.0.6 -controllerPort 9000 -user null -password [hidden] -exec
+INFO [AddTableCommand] [main] Executing command: AddTable -tableConfigFile /config/coinbase-ticker-stats-table-config.json -offlineTableConfigFile null -realtimeTableConfigFile null -schemaFile /config/coinbase-ticker-stats-schema.json -controllerProtocol http -controllerHost 172.22.0.6 -controllerPort 9000 -user null -password [hidden] -exec
 ```
 
-You should see two INFO-level messages in the command output as shown above, indicating that the Tables were successfully 
+You should see three INFO-level messages in the command output as shown above, indicating that the Tables were successfully 
 created. You can confirm that the tables are accessible by using the [Pinot UI](http://localhost:9000/#/tables)
 
 ![Pinot-Dashboard.png](doc%2Fimages%2FPinot-Dashboard.png)
@@ -171,8 +232,8 @@ You can even run some queries using the Pinot query manager to confirm that the 
 
 Real-Time Dashboards and Alerts
 --
-Build interactive dashboards using [Apache Superset](https://superset.apache.org/) to visualize real-time cryptocurrency market data.
-These dashboards can display live price charts, order book dynamics, trading volumes, and other key metrics.
+Build interactive dashboards using [Apache Superset](https://superset.apache.org/) to visualize real-time cryptocurrency
+market data. These dashboards can display live price charts, order book dynamics, trading volumes, and other key metrics.
 Implement alerting mechanisms using Pulsar's messaging capabilities to notify users about significant price movements, 
 trading opportunities, or risk events in real-time.
 
@@ -199,7 +260,6 @@ the [Superset UI](http://localhost:8088/login/) by logging in as the `admin` use
 
 Now that you can access the Superset UI, you are free to create as many DataSets, Charts, and Dashboards as you like. 
 You can also import some of the pre-built dashboards from the demo using the following command.
-
 
 ```bash
 ./bin/pinot/import-dashboards.sh

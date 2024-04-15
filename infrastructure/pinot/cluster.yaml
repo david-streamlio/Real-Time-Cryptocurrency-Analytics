@@ -21,7 +21,8 @@ services:
     environment:
       JAVA_OPTS: "-Dplugins.dir=/opt/pinot/plugins -Dplugins.include=pinot-pulsar -Xms1G -Xmx4G -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xloggc:gc-pinot-controller.log"
     volumes:
-      - config_data:/config
+      - schemas:/ddl
+      - pinot-config:/config
     depends_on:
       - pinot-zookeeper
 
@@ -66,8 +67,15 @@ services:
       - pinot-broker
 
 volumes:
-  config_data:
+  schemas:
     driver: local # Define the driver and options under the volume name
+    driver_opts:
+      type: none
+      device: ./schemas
+      o: bind
+
+  pinot-config:
+    driver: local
     driver_opts:
       type: none
       device: ./pinot-config
