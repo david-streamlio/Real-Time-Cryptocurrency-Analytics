@@ -1,0 +1,55 @@
+{
+  "metricFieldSpecs": [
+    {
+      "dataType": "DOUBLE",
+      "name": "price"
+    },
+    {
+      "dataType": "DOUBLE",
+      "name": "latest_emwa"
+    },
+    {
+      "dataType": "DOUBLE",
+      "name": "latest_std"
+    },
+    {
+      "dataType": "DOUBLE",
+      "name": "latest_variance"
+    },
+    {
+      "dataType": "DOUBLE",
+      "name": "rolling_mean"
+    },
+    {
+      "dataType": "DOUBLE",
+      "name": "rolling_std"
+    },
+    {
+      "dataType": "DOUBLE",
+      "name": "rolling_variance"
+    }
+  ],
+  "dimensionFieldSpecs": [
+    {
+      "dataType": "LONG",
+      "name": "sequence"
+    },
+    {
+      "dataType": "STRING",
+      "name": "product_id"
+    },
+    {
+      "dataType": "STRING",
+      "name": "time"
+    }
+  ],
+  "dateTimeFieldSpecs": [
+    {
+      "name": "millis",
+      "dataType": "LONG",
+      "format": "1:MILLISECONDS:EPOCH",
+      "granularity": "1:MILLISECONDS"
+    }
+  ],
+  "schemaName": "coinbase_ticker_stats"
+}

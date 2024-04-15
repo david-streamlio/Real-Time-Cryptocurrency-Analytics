@@ -2,12 +2,19 @@
 
 docker exec -it pinot-controller sh -c \
   "./bin/pinot-admin.sh AddTable -tableConfigFile \
-     /config/coinbase-rfq-match-table-config.json -schemaFile \
-     /config/coinbase-rfq-match-schema.json -exec"
+     /ddl/coinbase-rfq-match-table-config.json -schemaFile \
+     /ddl/coinbase-rfq-match-schema.json -exec"
 
 sleep 5
 
 docker exec -it pinot-controller sh -c \
   "./bin/pinot-admin.sh AddTable -tableConfigFile \
-     /config/coinbase-ticker-table-config.json -schemaFile \
-     /config/coinbase-ticker-schema.json -exec"
+     /ddl/coinbase-ticker-table-config.json -schemaFile \
+     /ddl/coinbase-ticker-schema.json -exec"
+
+sleep 5
+
+docker exec -it pinot-controller sh -c \
+  "./bin/pinot-admin.sh AddTable -tableConfigFile \
+     /ddl/coinbase-ticker-stats-table-config.json -schemaFile \
+     /ddl/coinbase-ticker-stats-schema.json -exec"
