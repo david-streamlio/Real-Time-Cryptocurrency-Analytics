@@ -1,0 +1,27 @@
+{
+  "metricFieldSpecs": [
+    {
+      "dataType": "DOUBLE",
+      "name": "volatility"
+    }
+  ],
+  "dimensionFieldSpecs": [
+    {
+      "dataType": "STRING",
+      "name": "product_id"
+    },
+    {
+      "dataType": "LONG",
+      "name": "window_start_time"
+    }
+  ],
+  "dateTimeFieldSpecs": [
+    {
+      "name": "window_end_time",
+      "dataType": "LONG",
+      "format": "1:MILLISECONDS:EPOCH",
+      "granularity": "1:MILLISECONDS"
+    }
+  ],
+  "schemaName": "coinbase_volatility"
+}

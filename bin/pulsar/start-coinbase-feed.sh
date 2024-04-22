@@ -13,4 +13,4 @@ sleep 5
 docker exec -it pulsar-broker sh -c \
   "./bin/pulsar-admin sources create \
      --archive /etc/pulsar-functions/lib/coinbase-live-feed-1.0.0.nar \
-     --source-config-file /etc/pulsar-functions/conf/coinbase-connector-all.yaml"
+     --source-config-file /etc/pulsar-functions/conf/coinbase-feed.yaml"

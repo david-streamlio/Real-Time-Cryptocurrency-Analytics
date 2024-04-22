@@ -1,0 +1,27 @@
+##################################
+# Deployment
+##################################
+className: io.streamnative.data.feeds.realtime.coinbase.VolatilityTracker
+tenant: feeds
+namespace: realtime
+name: coinbase-volatility
+topicName: persistent://feeds/realtime/coinbase-volatility
+configs:
+  db.jdbc.url: jdbc:pinot://pinot-controller:9000?brokers=pinot-broker:8099
+  db.query: | 
+    SELECT product_id,
+      FLOOR(millis / (1 * 60 * 1000)) * (1 * 60 * 1000) AS window_start_time,
+      FLOOR(millis / (1 * 60 * 1000)) * (1 * 60 * 1000) + (1 * 60 * 1000) AS window_end_time,
+      STDDEV_SAMP(price) AS volatility
+    FROM coinbase_ticker
+    WHERE millis >= FLOOR((NOW() - (5 * 1000 * 1000)) / (1 * 60 * 1000)) * (1 * 60 * 1000)
+    GROUP BY product_id,
+        window_start_time
+    ORDER BY window_start_time ASC, 
+        volatility DESC LIMIT 10000
+
+##################################
+# Processing
+##################################
+processingGuarantees: AT_MOST_ONCE
+logTopic: persistent://feeds/realtime/coinbase-volatility-log
