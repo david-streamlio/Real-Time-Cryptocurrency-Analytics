@@ -8,7 +8,9 @@
     "retentionTimeValue": "5",
     "replication": "1"
   },
-  "tableIndexConfig": {},
+  "tableIndexConfig": {
+    "invertedIndexColumns": ["product_id"]
+  },
   "routing": {
     "segmentPrunerTypes": [
       "time"

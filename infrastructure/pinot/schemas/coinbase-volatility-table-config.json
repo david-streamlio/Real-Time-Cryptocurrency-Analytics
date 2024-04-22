@@ -1,11 +1,11 @@
 {
-  "tableName": "coinbase_ticker",
+  "tableName": "coinbase_volatility",
   "tableType": "REALTIME",
   "tenants": {},
   "segmentsConfig": {
-    "timeColumnName": "millis",
+    "timeColumnName": "window_end_time",
     "retentionTimeUnit": "DAYS",
-    "retentionTimeValue": "5",
+    "retentionTimeValue": "1",
     "replication": "1"
   },
   "tableIndexConfig": {
@@ -21,7 +21,7 @@
       "streamConfigMaps": [
         {
           "streamType": "pulsar",
-          "stream.pulsar.topic.name": "persistent://feeds/realtime/coinbase-ticker",
+          "stream.pulsar.topic.name": "persistent://feeds/realtime/coinbase-volatility",
           "stream.pulsar.bootstrap.servers": "pulsar://pulsar-broker:6650",
           "stream.pulsar.consumer.prop.auto.offset.reset" : "smallest",
           "stream.pulsar.consumer.type": "lowlevel",
