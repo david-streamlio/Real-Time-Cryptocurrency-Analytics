@@ -17,6 +17,7 @@ class Ticker(Record):
     time = String()
     millis = Long()
 
+
 class Schema:
     schema = None
 
@@ -51,7 +52,8 @@ class TickerStatsFunction(Function):
             return None  # Return None if the deque doesn't exist for the given stock symbol
 
     def calculate_latest_metrics(self, span, ticker_symbol):
-        data = self.get_prices_as_list(ticker_symbol)
+        # We need to reverse the list to get them in proper order, i.e. most recent price first
+        data = self.get_prices_as_list(ticker_symbol).reverse()
         series = pd.Series(data)
 
         # Calculate EWMA
@@ -65,7 +67,8 @@ class TickerStatsFunction(Function):
         return ewma.iloc[-1], std.iloc[-1], variance.iloc[-1]
 
     def calculate_rolling_metrics(self, span, window, ticker_symbol):
-        data = self.get_prices_as_list(ticker_symbol)
+        # We need to reverse the list to get them in proper order, i.e. most recent price first
+        data = self.get_prices_as_list(ticker_symbol).reverse()
         s = pd.Series(data)
 
         rolling_mean = s.rolling(window=window).mean()
