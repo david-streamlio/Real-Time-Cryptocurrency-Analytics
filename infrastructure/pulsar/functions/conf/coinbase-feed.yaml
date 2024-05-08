@@ -11,7 +11,7 @@ configs:
   subscription: "{ \"type\": \"subscribe\", 
     \"channels\": [\"ticker\", \"rfq_matches\", \"auctionfeed\"], 
     \"product_ids\": [ \"ETH-USD\", \"BTC-USD\", \"USDT-USD\", \"SOL-USD\", \"XRP-USD\"
-    \ , \"DOGE-USD\", \"ADA-USD\" ] }"
+    \ , \"DOGE-USD\", \"ADA-USD\", \"LTC-USD\" ] }"
 
 ##################################
 # Processing

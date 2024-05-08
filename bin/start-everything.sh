@@ -8,12 +8,12 @@ sleep 15
 echo "Starting the data feed..."
 sh ./bin/pulsar/start-coinbase-feed.sh
 
-sleep 2
+sleep 5
 
 echo "Starting the content based routing function..."
 sh ./bin/pulsar/start-coinbase-feed-router.sh
 
-sleep 2
+sleep 5
 
 echo "Starting the ticker stats function..."
 sh ./bin/pulsar/start-ticker-stats.sh
@@ -23,7 +23,7 @@ sleep 2
 echo "Starting Apache Pinot..."
 sh ./bin/pinot/start-pinot.sh
 
-sleep 20
+sleep 25
 
 echo "Creating the Apache Pinot tables..."
 sh ./bin/pinot/create-pinot-tables.sh

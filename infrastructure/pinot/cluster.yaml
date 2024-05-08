@@ -1,4 +1,3 @@
-version: '3.9'
 services:
   pinot-zookeeper:
     image: zookeeper:3.5.6
@@ -22,7 +21,6 @@ services:
       JAVA_OPTS: "-Dplugins.dir=/opt/pinot/plugins -Dplugins.include=pinot-pulsar -Xms1G -Xmx4G -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xloggc:gc-pinot-controller.log"
     volumes:
       - schemas:/ddl
-      - pinot-config:/config
     depends_on:
       - pinot-zookeeper
 
@@ -72,13 +70,6 @@ volumes:
     driver_opts:
       type: none
       device: ./schemas
-      o: bind
-
-  pinot-config:
-    driver: local
-    driver_opts:
-      type: none
-      device: ./pinot-config
       o: bind
 
   superset-config:
